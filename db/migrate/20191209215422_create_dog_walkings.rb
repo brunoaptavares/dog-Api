@@ -13,4 +13,5 @@ class CreateDogWalkings < ActiveRecord::Migration[6.0]
     end
 
     add_index :dog_walkings, :status
+  end
 end
