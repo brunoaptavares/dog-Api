@@ -2,7 +2,7 @@ class DogWalking < ApplicationRecord
   include AASM
 
   has_one :provider
-  has_many :pets
+  has_and_belongs_to_many :pets
 
   validates :status, :schedule_date, :price, :duration, :latitude, :longitude,
             :ini_date, :end_date, presence: true

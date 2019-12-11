@@ -1,0 +1,2 @@
+class DogWalkingController < ApplicationController
+end
