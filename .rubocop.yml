@@ -1,0 +1,46 @@
+require: rubocop-rails
+
+AllCops:
+  Exclude:
+    - 'db/**/*.rb'
+    - 'bin/*'
+    - 'Guardfile'
+    - 'Rakefile'
+    - 'spec/{spec,rails}_helper.rb'
+    - 'config/puma.rb'
+    - 'config/environments/*'
+    - 'config/initializers/backtrace_silencers.rb'
+    - 'config/initializers/content_security_policy.rb'
+    - 'config/initializers/wrap_parameters.rb'
+
+Layout/DotPosition:
+  EnforcedStyle: trailing
+
+Layout/EmptyLinesAroundBlockBody:
+  Exclude:
+    - 'db/schema.rb'
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+    - 'config/routes.rb'
+
+Style/BlockDelimiters:
+  EnforcedStyle: braces_for_chaining
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Rails/OutputSafety:
+  Exclude:
+    - 'config/application.rb'
+
+Rails/HasAndBelongsToMany:
+  Exclude:
+    - 'app/models/*'
