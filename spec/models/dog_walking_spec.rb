@@ -9,15 +9,27 @@ RSpec.describe DogWalking, type: :model do
   it { is_expected.to validate_presence_of(:duration) }
   it { is_expected.to validate_presence_of(:latitude) }
   it { is_expected.to validate_presence_of(:longitude) }
-  it { is_expected.to validate_presence_of(:ini_date) }
-  it { is_expected.to validate_presence_of(:end_date) }
+
+  let(:params) do
+    {
+      schedule_date: Time.zone.today,
+      price: 10.0,
+      duration: 30,
+      latitude: '112233',
+      longitude: '000000',
+      ini_date: Time.current,
+      end_date: Time.current + 1.hour
+    }
+  end
 
   describe 'transicao de status' do
     let(:dog_walking) { DogWalking.new }
 
     it 'has default status' do
       expect(dog_walking.status).to eq('scheduled')
-      expect(dog_walking).to transition_from(:scheduled).to(:finished).
+      expect(dog_walking).to transition_from(:scheduled).to(:started).
+        on_event(:started)
+      expect(dog_walking).to transition_from(:started).to(:finished).
         on_event(:finished)
       expect(dog_walking).to transition_from(:scheduled).to(:cancelled).
         on_event(:cancelled)
@@ -26,17 +38,6 @@ RSpec.describe DogWalking, type: :model do
 
   describe '.initialize' do
     subject { DogWalking.new(params) }
-    let(:params) do
-      {
-        schedule_date: Time.zone.today,
-        price: 10.0,
-        duration: 30,
-        latitude: '112233',
-        longitude: '000000',
-        ini_date: Time.current,
-        end_date: Time.current + 1.hour
-      }
-    end
 
     context 'com parametros validos' do
       let(:provider) { build(:provider) }
@@ -60,6 +61,24 @@ RSpec.describe DogWalking, type: :model do
       it 'deve instanciar o objeto com erros' do
         expect(subject.valid?).to be_falsey
         expect(subject.errors).to have(1).errors_on(:provider)
+      end
+    end
+  end
+
+  describe '#actual_duration' do
+    context 'quando a caminhada foi concluida' do
+      subject { DogWalking.new(params).actual_duration }
+
+      it 'deve retornar a diferenca de tempo entre inicio e fim da caminhada' do
+        expect(subject).to eq(60)
+      end
+    end
+
+    context 'quando a caminhada nao foi concluida' do
+      subject { DogWalking.new.actual_duration }
+
+      it 'deve retornar 0' do
+        expect(subject).to eq(0)
       end
     end
   end

@@ -1,3 +1,9 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  resources :dog_walkings, except: %i[new edit update destroy] do
+    collection do
+      post ':id/start_walk', :to => 'dog_walkings#start_walk'
+      post ':id/finish_walk', :to => 'dog_walkings#finish_walk'
+      post ':id/cancel_walk', :to => 'dog_walkings#cancel_walk'
+    end
+  end
 end

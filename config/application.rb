@@ -21,5 +21,6 @@ module DogApi
   class Application < Rails::Application
     config.load_defaults 6.0
     config.api_only = true
+    config.active_storage.draw_routes = false
   end
 end
