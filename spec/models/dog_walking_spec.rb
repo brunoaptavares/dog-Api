@@ -5,14 +5,13 @@ RSpec.describe DogWalking, type: :model do
   it { is_expected.to have_and_belong_to_many(:pets) }
   it { is_expected.to validate_presence_of(:status) }
   it { is_expected.to validate_presence_of(:schedule_date) }
-  it { is_expected.to validate_presence_of(:price) }
   it { is_expected.to validate_presence_of(:duration) }
   it { is_expected.to validate_presence_of(:latitude) }
   it { is_expected.to validate_presence_of(:longitude) }
 
   let(:params) do
     {
-      schedule_date: Time.zone.today,
+      schedule_date: Time.current,
       price: 10.0,
       duration: 30,
       latitude: '112233',
@@ -20,6 +19,27 @@ RSpec.describe DogWalking, type: :model do
       ini_date: Time.current,
       end_date: Time.current + 1.hour
     }
+  end
+
+  describe 'scopes' do
+    context 'default_scope' do
+      let!(:dgw) { create(:dog_walking) }
+      let!(:dgw_2) { create(:dog_walking, schedule_date: Time.zone.yesterday) }
+
+      it 'ordenado por data de agendamento' do
+        expect(DogWalking.all.to_a).to eq [dgw_2, dgw]
+      end
+    end
+
+    context '.next_walks' do
+      let!(:dgw) { create(:dog_walking, schedule_date: Time.zone.yesterday) }
+      let!(:dgw_2) { create(:dog_walking, schedule_date: 2.days.from_now) }
+      let!(:dgw_3) { create(:dog_walking, schedule_date: Time.zone.tomorrow) }
+
+      it 'apenas próximos agendamentos' do
+        expect(DogWalking.next_walks.to_a).to eq [dgw_3, dgw_2]
+      end
+    end
   end
 
   describe 'transicao de status' do

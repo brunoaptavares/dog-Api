@@ -4,8 +4,13 @@ class DogWalking < ApplicationRecord
   belongs_to :provider
   has_and_belongs_to_many :pets
 
-  validates :status, :schedule_date, :price, :duration, :latitude, :longitude,
+  validates :status, :schedule_date, :duration, :latitude, :longitude,
             presence: true
+
+  default_scope { order(schedule_date: :asc) }
+  scope :next_walks, lambda {
+    where('dog_walkings.schedule_date > ?', Time.zone.today.beginning_of_day)
+  }
 
   aasm column: :status do
     state :scheduled, initial: true
@@ -27,8 +32,9 @@ class DogWalking < ApplicationRecord
   end
 
   def actual_duration
-    return 0 if self.end_date.blank? || self.ini_date.blank?
-    ((self.end_date - self.ini_date) / 60).round
+    return 0 if end_date.blank? || ini_date.blank?
+
+    ((end_date - ini_date) / 60).round
   end
 
   private

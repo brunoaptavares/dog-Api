@@ -25,12 +25,12 @@ ActiveRecord::Schema.define(version: 2019_12_11_181120) do
   create_table "dog_walkings", force: :cascade do |t|
     t.string "status", default: "scheduled"
     t.datetime "schedule_date", null: false
-    t.decimal "price", precision: 8, scale: 2, null: false
+    t.decimal "price", precision: 8, scale: 2
     t.integer "duration", null: false
     t.string "latitude", null: false
     t.string "longitude", null: false
-    t.datetime "ini_date", null: false
-    t.datetime "end_date", null: false
+    t.datetime "ini_date"
+    t.datetime "end_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "provider_id"

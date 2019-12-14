@@ -1,24 +1,39 @@
-# README
+# DOG-API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+* Dog-API
 
-Things you may want to cover:
+### Docker
 
-* Ruby version
+```shell
+  docker-compose build
+  docker-compose up
+```
 
-* System dependencies
+Acesse em http://localhost:3000
 
-* Configuration
+### Sem Docker
 
-* Database creation
+```shell
+  bin/rails server -p 3000
+```
 
-* Database initialization
+Acesse em http://localhost:3000
 
-* How to run the test suite
+### Rotas criadas
 
-* Services (job queues, cache servers, search engines, etc.)
+* GET /clients -> Lista de clientes cadastrados
+* GET /clients/:id - > Retorna um cliente específico
+* POST /clients -> Cria um cliente
+* PATCH/PUT /clients/:id -> Atualiza os dados de um cliente específico
+* GET /providers -> Lista de Prestadores cadastrados
+* GET /providers/:id - > Retorna um Prestadores específico
+* POST /providers -> Cria um Prestadores
+* PATCH/PUT /providers/:id -> Atualiza os dados de um Prestadores específico
 
-* Deployment instructions
+### Testes
 
-* ...
+* Para a executar os testes:
+
+```shell
+  bin/rspec
+```

@@ -22,5 +22,8 @@ module DogApi
     config.load_defaults 6.0
     config.api_only = true
     config.active_storage.draw_routes = false
+    config.time_zone = ENV.fetch('TZ', 'Brasilia')
+    config.i18n.enforce_available_locales = true
+    config.active_record.default_timezone = :local
   end
 end
