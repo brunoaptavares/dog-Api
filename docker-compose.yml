@@ -1,7 +1,8 @@
-version: '3'
+version: '3.7'
 services:
   web:
     build: .
+    entrypoint: entrypoint.sh
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - .:/dog-api
@@ -10,13 +11,12 @@ services:
     depends_on:
       - db
   db:
-    image: postgres:11.2
-    ports:
-      - "5434:5432"
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: dog_api_development
+    image: postgres:12.0-alpine
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_DB=dog_api_development
+      - POSTGRES_PASSWORD=dog_api_development
 volumes:
-  pgdata:
+  postgres_data:

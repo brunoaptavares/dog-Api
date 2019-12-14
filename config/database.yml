@@ -2,19 +2,19 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  #host: db
+  host: db
+  username: root
+  database: dog_api_development
+  password: dog_api_development
 
 development:
   <<: *default
-  username: root
-  database: dog_api_development
 
 test:
   <<: *default
-  database: dog_api_test
 
 production:
   <<: *default
   database: dog_api_production
   username: dog_api
-  password: <%= ENV['DOG_API_DATABASE_PASSWORD'] %>
+  password: dog_api
