@@ -5,9 +5,13 @@ RSpec.describe DogWalking, type: :model do
   it { is_expected.to have_and_belong_to_many(:pets) }
   it { is_expected.to validate_presence_of(:status) }
   it { is_expected.to validate_presence_of(:schedule_date) }
-  it { is_expected.to validate_presence_of(:duration) }
   it { is_expected.to validate_presence_of(:latitude) }
   it { is_expected.to validate_presence_of(:longitude) }
+  it { is_expected.to validate_presence_of(:duration) }
+  it do
+    is_expected.to validate_inclusion_of(:duration).in_array([30, 60]).
+      with_message('duration must be 30 or 60 min')
+  end
 
   let(:params) do
     {
@@ -99,6 +103,47 @@ RSpec.describe DogWalking, type: :model do
 
       it 'deve retornar 0' do
         expect(subject).to eq(0)
+      end
+    end
+  end
+
+  describe 'Calculo de preços' do
+    let!(:pet1) { create(:pet) }
+    let!(:pet2) { create(:pet) }
+
+    context 'quando a caminhada é de meia hora' do
+      context 'e possui um pet' do
+        let!(:dgw) { create(:dog_walking, duration: 30, pets: [pet1]) }
+
+        it 'deve ter o preço de 25 reais' do
+          expect(dgw.price).to eq(25)
+        end
+      end
+
+      context 'e possui dois pets' do
+        let!(:dgw) { create(:dog_walking, duration: 30, pets: [pet1, pet2]) }
+
+        it 'deve ter o preço de 40 reais' do
+          expect(dgw.price).to eq(40)
+        end
+      end
+    end
+
+    context 'quando a caminhada é de uma hora' do
+      context 'e possui um pet' do
+        let!(:dgw) { create(:dog_walking, duration: 60, pets: [pet1]) }
+
+        it 'deve ter o preço de 25 reais' do
+          expect(dgw.price).to eq(35)
+        end
+      end
+
+      context 'e possui dois pets' do
+        let!(:dgw) { create(:dog_walking, duration: 60, pets: [pet1, pet2]) }
+
+        it 'deve ter o preço de 40 reais' do
+          expect(dgw.price).to eq(55)
+        end
       end
     end
   end

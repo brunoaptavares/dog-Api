@@ -8,5 +8,6 @@ Rails.application.routes.draw do
   end
 
   resources :clients, except: %i[destroy]
+  resources :pets, except: %i[destroy]
   resources :providers, except: %i[destroy]
 end

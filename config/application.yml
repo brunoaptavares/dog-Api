@@ -1,0 +1,7 @@
+prices:
+  half:
+    first: 25
+    additional: 15
+  hour:
+    first: 35
+    additional: 20

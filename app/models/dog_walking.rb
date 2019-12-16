@@ -6,11 +6,15 @@ class DogWalking < ApplicationRecord
 
   validates :status, :schedule_date, :duration, :latitude, :longitude,
             presence: true
+  validates :duration, inclusion: { in: [30, 60],
+                                    message: 'duration must be 30 or 60 min' }
 
   default_scope { order(schedule_date: :asc) }
   scope :next_walks, lambda {
     where('dog_walkings.schedule_date > ?', Time.zone.today.beginning_of_day)
   }
+
+  after_save :calculate_price
 
   aasm column: :status do
     state :scheduled, initial: true
@@ -45,5 +49,37 @@ class DogWalking < ApplicationRecord
 
   def end_walk
     self.end_date = Time.current
+  end
+
+  def calculate_price
+    return calculate_half_price if half_walk?
+
+    return calculate_hour_price if hour_walk?
+  end
+
+  def calculate_half_price
+    self.price =
+      half_prices['first'] + (half_prices['additional'] * (pets.count - 1))
+  end
+
+  def calculate_hour_price
+    self.price =
+      hour_prices['first'] + (hour_prices['additional'] * (pets.count - 1))
+  end
+
+  def half_walk?
+    duration == 30
+  end
+
+  def hour_walk?
+    duration == 60
+  end
+
+  def half_prices
+    AppConfig['prices']['half']
+  end
+
+  def hour_prices
+    AppConfig['prices']['hour']
   end
 end
