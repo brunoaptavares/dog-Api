@@ -6,7 +6,7 @@ ruby '2.6.3'
 gem 'aasm', '4.9'
 gem 'api-pagination', '~> 4.8.2'
 gem 'bootsnap', '>= 1.4.2', require: false
-gem 'kaminari', '~> 1.1.1'
+gem 'kaminari', '~> 1.2.1'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 4.1'
 gem 'rails', '~> 6.0.1'
